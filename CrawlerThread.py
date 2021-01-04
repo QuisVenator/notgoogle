@@ -1,4 +1,5 @@
 import threading, time
+from dbinterface import DbInterface
 from getlinks import getlinks
 
 class CrawlerThread (threading.Thread):
@@ -13,6 +14,8 @@ class CrawlerThread (threading.Thread):
         self.linkMaxBufferSize = 500
     
     def run(self):
+        self.conn = DbInterface("test.db")
+        
         threadNum = self.threadNum
         tcount = self.threadCount
         queue = self.queueList[threadNum]
@@ -24,7 +27,7 @@ class CrawlerThread (threading.Thread):
                 url = queue.get()
                 if not url in touched:
                     touched[url] = 1
-                    newurls = getlinks(url)
+                    newurls = getlinks(url, self.conn)
                     if newurls:
                         for url in newurls:
                             if url in touched:
@@ -56,4 +59,5 @@ class CrawlerThread (threading.Thread):
 
         while self.queueCount[self.threadNum] > self.linkMinBufferSize:
             dumpFile.write(self.queueList[self.threadNum].get())
+            dumpFile.write("\n")
             self.queueCount[self.threadNum] -= 1

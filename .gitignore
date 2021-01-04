@@ -1,3 +1,4 @@
 /.vscode
 /__pycache__
 /dump2.txt
+*.db

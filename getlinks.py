@@ -1,7 +1,8 @@
 import urllib.request, urllib.parse, urllib.error
+from dbinterface import DbInterface
 from bs4 import BeautifulSoup
 
-def getlinks(url, connection):
+def getlinks(url, connection : DbInterface):
     try :
         soup = BeautifulSoup(urllib.request.urlopen(url).read(), "html.parser")
     except:
@@ -37,14 +38,13 @@ def getlinks(url, connection):
         pass
 
     #TODO pass a connection and insert all words in database
-    for word in words:
-
+    connection.insert_data(words, url, links)
     
     return links
 
 #debug function with standard url
 #getlinks("https://www.crummy.com/software/BeautifulSoup/bs4/doc/#installing-a-parser")
 
-#url = input("URL: ")
-#for link in getlinks(url):
+#url = "https://de.wikipedia.org/wiki/Wikipedia:Hauptseite"
+#for link in getlinks(url, None):
 #    print(link)

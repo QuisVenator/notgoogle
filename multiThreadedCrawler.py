@@ -1,8 +1,20 @@
+import os, threading
+from dbinterface import DbInterface
 from InputThread import InputThread
 from CrawlerThread import CrawlerThread
 from queue import LifoQueue
 
 ####Main function
+if os.path.exists("test.db"):
+    os.remove("test.db")
+
+db = DbInterface("test.db")
+db.inititialize_database()
+db = None
+
+#debugging purpose print id of main thread
+#print(threading.get_ident())
+
 threadCount = 10
 queueList = list()
 threadList = list()
