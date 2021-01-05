@@ -15,7 +15,7 @@ db = None
 #debugging purpose print id of main thread
 #print(threading.get_ident())
 
-threadCount = 10
+threadCount = 20
 queueList = list()
 threadList = list()
 queueCount = list()
@@ -23,7 +23,7 @@ for i in range(threadCount):
     queueList.append(LifoQueue())
     queueCount.append(0)
 
-url = "https://de.wikipedia.org/wiki/Wikipedia:Hauptseite"
+url = "https://de.wikipedia.org/wiki/Computer"#"https://de.wikipedia.org/wiki/Wikipedia:Hauptseite"
 queueList[hash(url)%threadCount].put(url)
 
 for i in range(threadCount):

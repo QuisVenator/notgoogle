@@ -2,6 +2,7 @@ import sqlite3
 from sqlite3 import Error
 from sqlite3.dbapi2 import Connection
 
+#TODO switch to using ids instead of copying the entire url
 class DbInterface:
     def __init__(self, db_file):
         self.connection = sqlite3.connect(db_file)

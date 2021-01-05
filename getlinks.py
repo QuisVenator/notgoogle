@@ -1,8 +1,10 @@
-import urllib.request, urllib.parse, urllib.error
+import urllib.request, urllib.parse, urllib.error, re
 from dbinterface import DbInterface
 from bs4 import BeautifulSoup
 
 def getlinks(url, connection : DbInterface):
+    if not "wikipedia.org" in url: return
+    
     try :
         soup = BeautifulSoup(urllib.request.urlopen(url).read(), "html.parser")
     except:
@@ -23,15 +25,18 @@ def getlinks(url, connection : DbInterface):
         if "description" in tag.attrs and len(tag.get("content", "")) <= 400:
             description = tag.get("content", "").split()
             for word in description:
+                word = re.sub('[^a-z0-9äüöñßáéíóúý]+', '', word.lower(), flags=re.IGNORECASE)
                 words[word] = 1
         elif "keywords" in tag.attrs and len(tag.get("content", "")) <= 200:
             keywords = tag.get("content", "").split()
             for word in keywords:
+                word = re.sub('[^a-z0-9äüöñßáéíóúý]+', '', word.lower(), flags=re.IGNORECASE)
                 words[word] = 1
     try:
         title = soup.find("title").text
         if len(title) <= 200:
             for word in title.split():
+                word = re.sub('[^a-z0-9äüöñßáéíóúý]+', ' ', word.lower(), flags=re.IGNORECASE)
                 if word in words: words[word] += 0.1
                 else: words[word] = 1
     except:
